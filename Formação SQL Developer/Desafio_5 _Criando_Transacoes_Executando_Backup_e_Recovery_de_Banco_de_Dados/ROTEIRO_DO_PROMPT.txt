@@ -1,0 +1,57 @@
+### Formação SQL Database Specialist
+### Desafio 5 - Criando Transações, Executando Backup e Recovery de Banco de Dados
+### PARTE 3 - Arquivo ROTEIRO_DO_PROMPT.txt Listando ações via CMD
+### Autor: [Luis Pontes]
+### Perfil DIO: [https://web.dio.me/users/MAILTOLUISCARLOS]
+### GitHub: [https://github.com/CientistaPY]
+
+
+Abri um terminal via prompt de comando.
+
+Conectei-me ao MySQL  pelas minhas credenciais:
+mysql -u luis -p
+
+senha:
+Nefelin@2023
+
+Uma vez conectado ao servidor MySQL, pude selecionar o banco de dados "streaming" usando o comando USE:
+USE streaming;
+
+Após entrar no shell do MySQL, digitei o seguinte comando para desabilitar o autocommit:
+SET autocommit = 0;
+
+Agora pude prosseguir com as operações de transação, backup ou recovery:
+
+SELECT * FROM v_users;
+
+adicionei 2 usuários:
+CALL TransactionWithRollback('INSERT', 'users', 6, 'LariSilva', 'Lari@example.com', '123123123', NULL);
+CALL TransactionWithRollback('INSERT', 'users', 7, 'LauraPontes', 'Lauraexample.com', '123123QQQ', NULL);
+
+criei um SAVEPOINT:
+SAVEPOINT savepoint_test1;
+
+modifiquei os registros desses 2 usuários: 
+CALL TransactionWithRollback('DELETE', 'users', 7, 'LauraPontes', 'Lauraexample.com', '123123QQQ', NULL);
+CALL TransactionWithRollback('UPDATE', 'users', 6, 'Lari Silva', 'Lari@example.com', '123123123', NULL);
+
+visualizei as mudanças:
+SELECT * FROM v_users;
+
+fiz o recovery para o momento antes da modificação dos 2 usuários recém criados:
+ROLLBACK TO savepoint_test1;
+
+visualizei as mudanças desfeitas:
+SELECT * FROM v_users;
+
+gerei um arquivo chamado "backup.sql" que contém o dump do banco de dados especificado:
+mysqldump -u luis -p streaming > c:\projpy\backup.sql;
+
+confirmei todas as operações realizadas na transação:
+COMMIT;
+
+Após concluir as operações de transação, backup ou recovery,  pude habilitar o autocommit novamente:
+SET autocommit = 1;
+
+Encerrar a Sessão:
+EXIT;
