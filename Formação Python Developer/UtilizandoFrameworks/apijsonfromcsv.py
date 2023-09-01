@@ -28,8 +28,10 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 run_with_ngrok(app)  # Para expor a API usando ngrok
 
+# Fará com que o Pandas ignore as linhas que não podem ser analisadas corretamente e continue lendo o restante do arquivo
+df = pd.read_csv(csv_url, error_bad_lines=False)
 # URL do arquivo CSV no GitHub
-csv_url = "https://raw.githubusercontent.com/seu_usuario/seu_repositorio/seu_arquivo.csv"
+csv_url = "https://github.com/CientistaPY/desafios_dio/blob/main/Forma%C3%A7%C3%A3o%20Python%20Developer/UtilizandoFrameworks/planilha.csv"
 
 @app.route("/index")
 def get_csv_as_json():
